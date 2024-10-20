@@ -1,0 +1,91 @@
+import {StyleSheet} from 'react-native';
+
+export const topDealsFilterStyles = StyleSheet.create({
+  container: {
+    paddingVertical: 20,
+    paddingHorizontal: 0,
+    backgroundColor: '#fff',
+    height: '100%',
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingBottom: 20,
+    paddingHorizontal: 15,
+  },
+  filterContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    bottom: 0,
+    backgroundColor: '#fff',
+    width: '100%',
+  },
+  filterText: {
+    fontSize: 16,
+    color: '#F15927',
+  },
+  filterText2: {
+    fontSize: 16,
+    color: '#fff',
+  },
+  button: {
+    width: '50%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#C8C9CD',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  button2: {
+    width: '50%',
+    height: 40,
+    borderWidth: 1,
+    borderColor: '#C8C9CD',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#F15927',
+  },
+  filterBox: {
+    borderTopWidth: 1,
+    borderColor: '#e3e3e3',
+    height: '100%',
+    flexDirection: 'row',
+  },
+  filterParams: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#e3e3e3',
+  },
+  filterKeys: {
+    height: 45,
+    flexDirection: 'row',
+    gap: 10,
+    alignItems: 'center',
+    borderBottomWidth: 1,
+    borderColor: '#e3e3e3',
+  },
+  filterParamsActive: {
+    height: 45,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#FEF2EE',
+    borderColor: '#e3e3e3',
+    borderBottomWidth: 1,
+  },
+  filterParamActiveText: {
+    fontWeight: 'bold',
+    color: '#000',
+  },
+  filterParamText: {
+    fontWeight: 'normal',
+  },
+});
