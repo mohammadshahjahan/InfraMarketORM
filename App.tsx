@@ -15,7 +15,7 @@ import {CementProvider} from './Providers/CementProvider';
 import Cement from './Screens/Cement/index';
 import CementFilter from './Screens/Filter/CementFilter';
 import OutOfStock from './Components/OutOfStock';
-import ProductPage from './Components/ProductPage';
+import ProductPage from './Screens/ProductPageScreen/index';
 
 export type rootStackParamList = {
   Home: undefined;
