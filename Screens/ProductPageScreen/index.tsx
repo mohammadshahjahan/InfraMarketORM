@@ -9,12 +9,16 @@ import PriceBox from './PriceBox';
 import Specification from './Specification';
 import Quantity, {QuantityVariableStyles} from './Quantity';
 import ImageContainer from './ImageContainer';
+import {useCartContext} from '../../Providers/CartProvider';
+import Header from './Header';
+import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 
 type ProductPageProps = {
   route: RouteProp<rootStackParamList, 'Product Details'>;
+  navigation: NativeStackNavigationProp<rootStackParamList>;
 };
 
-const ProductPage: React.FC<ProductPageProps> = ({route}) => {
+const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
   const id = route.params.id;
   const product = getData(id);
   const skuIdRandom = '1234QWE';
@@ -27,108 +31,117 @@ const ProductPage: React.FC<ProductPageProps> = ({route}) => {
   const [quantity, setQuantity] = useState(0);
   const [amount, setAmount] = useState(0);
 
+  const {addItemToCart} = useCartContext();
+
   useEffect(() => {
     const price = product.discount ? product.discountedPrice : product.price;
     setAmount(price * quantity);
   }, [quantity, product.discount, product.discountedPrice, product.price]);
 
   return (
-    <ScrollView>
-      <View style={{paddingHorizontal: 20, backgroundColor: '#fff'}}>
-        <ImageContainer />
-        <View style={{flexDirection: 'row', gap: 20}}>
-          <ProductLabels label="SKU ID" value={skuIdRandom} />
-          <ProductLabels label="Brand" value={product.Brand} />
-        </View>
-        <View>
-          <Text style={{fontWeight: 600, fontSize: 25, color: '#000'}}>
-            {product.label}
-          </Text>
-        </View>
-        <View style={ProductScreenPageStyles.ratingContaner}>
-          <View style={ProductScreenPageStyles.reviewContainer}>
-            <Star star={parseInt(product.Rating.substring(0, 1), 10)} />
-            <Text>
-              {' '}
-              <Text style={{fontWeight: 600}}>
-                {product.Rating.substring(0, 1)}
-              </Text>
-              (<Text>2 Reviews</Text>)
+    <>
+      <Header navigation={navigation} />
+      <ScrollView style={{zIndex: -10}}>
+        <View style={{paddingHorizontal: 20, backgroundColor: '#fff'}}>
+          <ImageContainer />
+          <View style={{flexDirection: 'row', gap: 20}}>
+            <ProductLabels label="SKU ID" value={skuIdRandom} />
+            <ProductLabels label="Brand" value={product.Brand} />
+          </View>
+          <View>
+            <Text style={{fontWeight: 600, fontSize: 25, color: '#000'}}>
+              {product.label}
             </Text>
           </View>
-          <TouchableOpacity>
-            <View>
-              <Text style={{color: '#F15927'}}>WRITE A REVIEW</Text>
+          <View style={ProductScreenPageStyles.ratingContaner}>
+            <View style={ProductScreenPageStyles.reviewContainer}>
+              <Star star={parseInt(product.Rating.substring(0, 1), 10)} />
+              <Text>
+                {' '}
+                <Text style={{fontWeight: 600}}>
+                  {product.Rating.substring(0, 1)}
+                </Text>
+                (<Text>2 Reviews</Text>)
+              </Text>
             </View>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <PriceBox
-            discount={product.discount}
-            discountedPrice={product.discountedPrice}
-            price={product.price}
-          />
-        </View>
-        <View
-          style={{
-            paddingBottom: 15,
-            marginBottom: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: '#e3e3e3',
-          }}>
-          <Specification
-            label={'Grade'}
-            options={Grade}
-            setter={setCurrGrade}
-            currOption={currGrade}
-          />
-          <View style={{height: 10}}></View>
-          <Specification
-            label={'Bag Size'}
-            options={BagSize}
-            setter={setCurrBagSize}
-            currOption={currBagSize}
-          />
-        </View>
-        <View
-          style={{
-            paddingBottom: 15,
-            marginBottom: 15,
-            borderBottomWidth: 1,
-            borderBottomColor: '#e3e3e3',
-            flexDirection: 'row',
-            gap: 15,
-            alignItems: 'center',
-          }}>
-          <View style={{flexDirection: 'column', gap: 10}}>
-            <Text>In Stock</Text>
-            <Text style={{fontWeight: 600}}>100</Text>
+            <TouchableOpacity>
+              <View>
+                <Text style={{color: '#F15927'}}>WRITE A REVIEW</Text>
+              </View>
+            </TouchableOpacity>
           </View>
-          <View style={{flexDirection: 'column', gap: 10}}>
-            <Text>Min Order Quantity</Text>
-            <Text style={{fontWeight: 600}}>1</Text>
+          <View>
+            <PriceBox
+              discount={product.discount}
+              discountedPrice={product.discountedPrice}
+              price={product.price}
+            />
           </View>
-          <View style={{flexDirection: 'column', gap: 10}}>
-            <Text>Max Order Quantity</Text>
-            <Text style={{fontWeight: 600}}>100</Text>
+          <View
+            style={{
+              paddingBottom: 15,
+              marginBottom: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: '#e3e3e3',
+            }}>
+            <Specification
+              label={'Grade'}
+              options={Grade}
+              setter={setCurrGrade}
+              currOption={currGrade}
+            />
+            <View style={{height: 10}}></View>
+            <Specification
+              label={'Bag Size'}
+              options={BagSize}
+              setter={setCurrBagSize}
+              currOption={currBagSize}
+            />
           </View>
-        </View>
-        <View>
-          <Quantity quantity={quantity} setter={setQuantity} value={amount} />
-        </View>
-        <View style={[QuantityVariableStyles.box]}>
-          <TouchableOpacity style={[QuantityVariableStyles.box]}>
-            <View
-              style={[
-                QuantityVariableStyles.box,
-                ProductScreenPageStyles.button,
-              ]}>
-              <Text style={{color: '#fff', fontSize: 20}}>ADD TO CART</Text>
+          <View
+            style={{
+              paddingBottom: 15,
+              marginBottom: 15,
+              borderBottomWidth: 1,
+              borderBottomColor: '#e3e3e3',
+              flexDirection: 'row',
+              gap: 15,
+              alignItems: 'center',
+            }}>
+            <View style={{flexDirection: 'column', gap: 10}}>
+              <Text>In Stock</Text>
+              <Text style={{fontWeight: 600}}>100</Text>
             </View>
-          </TouchableOpacity>
+            <View style={{flexDirection: 'column', gap: 10}}>
+              <Text>Min Order Quantity</Text>
+              <Text style={{fontWeight: 600}}>1</Text>
+            </View>
+            <View style={{flexDirection: 'column', gap: 10}}>
+              <Text>Max Order Quantity</Text>
+              <Text style={{fontWeight: 600}}>100</Text>
+            </View>
+          </View>
+          <View>
+            <Quantity quantity={quantity} setter={setQuantity} value={amount} />
+          </View>
+          <View style={[QuantityVariableStyles.box]}>
+            <TouchableOpacity
+              style={[QuantityVariableStyles.box]}
+              onPress={() =>
+                addItemToCart(id, currGrade, currBagSize, quantity)
+              }>
+              <View
+                style={[
+                  QuantityVariableStyles.box,
+                  ProductScreenPageStyles.button,
+                ]}>
+                <Text style={{color: '#fff', fontSize: 20}}>ADD TO CART</Text>
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </>
   );
 };
 

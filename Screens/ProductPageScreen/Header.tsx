@@ -1,7 +1,6 @@
 import React from 'react';
 import {CatalogStyles} from '../../Styles/CatalogStyles';
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useCementContext} from '../../Providers/CementProvider';
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
 import CartIcon from '../../Components/CartIcon';
@@ -11,17 +10,12 @@ type HeaderProps = {
 };
 
 const Header: React.FC<HeaderProps> = ({navigation}) => {
-  const {productData} = useCementContext();
   return (
     <View style={sty.header}>
       <View style={sty.titleBar}>
         <TouchableOpacity onPress={() => navigation.goBack()}>
           <Image source={require('../../assests/BackButton.png')} />
         </TouchableOpacity>
-        <View>
-          <Text style={[{fontSize: 25}, sty.textStyle]}>Cement</Text>
-          <Text style={sty.textStyle}>{productData.length} Items</Text>
-        </View>
       </View>
       <View style={CatalogStyles.headerIcon}>
         <CartIcon />
@@ -46,7 +40,8 @@ const sty = StyleSheet.create({
     paddingLeft: 0,
     paddingRight: 10,
     width: '100%',
-    marginBottom: 10,
+
+    backgroundColor: '#fff',
   },
   textStyle: {
     textAlign: 'center',

@@ -37,16 +37,16 @@ const QuantityVariable: React.FC<QuantityVariableProps> = ({
   setter,
 }) => {
   const adder = () => {
-    if (quantity === 100) {
+    if (quantity >= 100) {
       return;
     }
-    setter(prev => prev + 1);
+    setter(prev => prev + 10);
   };
   const subtract = () => {
-    if (quantity === 0) {
+    if (quantity <= 0) {
       return;
     }
-    setter(prev => prev - 1);
+    setter(prev => prev - 10);
   };
 
   return (

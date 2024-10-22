@@ -50,22 +50,18 @@ const ImageContainer = () => {
         </TouchableOpacity>
 
         <View style={QuantityVariableStyles.box}>
-          <View
-            style={
-              images[currImageIndex] === image1
-                ? {borderWidth: 1, borderColor: '#f15927'}
-                : {}
-            }>
-            <Image source={image1} style={{height: 50, width: 50}} />
-          </View>
-          <View
-            style={
-              images[currImageIndex] === image2
-                ? {borderWidth: 1, borderColor: '#f15927'}
-                : {}
-            }>
-            <Image source={image2} style={{height: 50, width: 50}} />
-          </View>
+          {images.map((image, index) => (
+            <TouchableOpacity
+              onPress={() => setCurrImageIndex(index)}
+              key={index}
+              style={
+                images[currImageIndex] === image
+                  ? {borderWidth: 1, borderColor: '#f15927'}
+                  : {}
+              }>
+              <Image source={image} style={{height: 50, width: 50}} />
+            </TouchableOpacity>
+          ))}
         </View>
 
         <TouchableOpacity
