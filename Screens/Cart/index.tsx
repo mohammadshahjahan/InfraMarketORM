@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Coupon from './Coupon';
 import {useCartContext} from '../../Providers/CartProvider';
@@ -7,13 +7,19 @@ import Invoice from './Invoice';
 import {OverlayCartStyle} from '../../Styles/OverlayCartStyle';
 import {QuantityStyles} from '../../Styles/QuantityStyles';
 import Items from './Items';
+import {useNavigation} from '@react-navigation/native';
+import {NativeStackNavigationProp} from 'react-native-screens/lib/typescript/native-stack/types';
+import {rootStackParamList} from '../../App';
 
 const Cart = () => {
-  const [isCouponAdded, setIsCouponAdded] = useState(true);
-  const {selectedItems, subTotal} = useCartContext();
+  const {selectedItems, subTotal, isCouponAdded, setIsCouponAdded} =
+    useCartContext();
   const disCount = isCouponAdded
     ? parseInt((subTotal * 0.2).toFixed(0), 10)
     : 0;
+
+  const {navigate} =
+    useNavigation<NativeStackNavigationProp<rootStackParamList>>();
   return (
     <View style={CartStyles.container}>
       <View style={{maxHeight: 330}}>
@@ -62,6 +68,7 @@ const Cart = () => {
             ₹ {subTotal - disCount + 500}{' '}
           </Text>
           <TouchableOpacity
+            onPress={() => navigate('Checkout')}
             style={[
               OverlayCartStyle.button,
               {backgroundColor: '#f15927', marginTop: 5},
