@@ -54,6 +54,7 @@ const OverLayCart: React.FC<OverLayCartProps> = ({setOpenOverlay}) => {
             <Text style={{color: '#f15927'}}>VIEW CART</Text>
           </TouchableOpacity>
           <TouchableOpacity
+            onPress={() => navigation.navigate('Checkout')}
             style={[OverlayCartStyle.button, {backgroundColor: '#f15927'}]}>
             <Text style={{color: '#fff'}}>CHECKOUT</Text>
           </TouchableOpacity>

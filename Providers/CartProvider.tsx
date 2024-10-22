@@ -20,6 +20,9 @@ interface CartContextProps {
     quantity: number,
   ) => void;
   subTotal: number;
+  isCouponAdded: boolean;
+  setIsCouponAdded: React.Dispatch<React.SetStateAction<boolean>>;
+  clearCart: () => void;
 }
 
 export const CartContext = createContext<CartContextProps | undefined>(
@@ -41,6 +44,13 @@ interface CartProviderProps {
 export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
   const [selectedItems, setSelectedItems] = useState<CartItemsProps[]>([]);
   const [subTotal, setSubTotal] = useState(0);
+  const [isCouponAdded, setIsCouponAdded] = useState(true);
+
+  const clearCart = () => {
+    setSelectedItems([]);
+    setSubTotal(0);
+    setIsCouponAdded(true);
+  };
 
   const addItemToCart = (
     id: number,
@@ -105,6 +115,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     selectedItems,
     addItemToCart,
     subTotal,
+    isCouponAdded,
+    setIsCouponAdded,
+    clearCart,
   };
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

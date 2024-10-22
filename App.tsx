@@ -18,6 +18,7 @@ import OutOfStock from './Components/OutOfStock';
 import ProductPage from './Screens/ProductPageScreen/index';
 import {CartProvider} from './Providers/CartProvider';
 import Cart from './Screens/Cart/index';
+import Checkout from './Screens/Checkout/index';
 
 export type rootStackParamList = {
   Home: undefined;
@@ -29,6 +30,7 @@ export type rootStackParamList = {
   Steel: undefined;
   'Product Details': {id: number};
   'Your Cart': undefined;
+  Checkout: undefined;
 };
 
 function App(): React.JSX.Element {
@@ -71,6 +73,7 @@ function App(): React.JSX.Element {
                 options={{headerShown: false}}
               />
               <Stack.Screen name="Your Cart" component={Cart} />
+              <Stack.Screen name="Checkout" component={Checkout} />
             </Stack.Navigator>
           </NavigationContainer>
         </CementProvider>
