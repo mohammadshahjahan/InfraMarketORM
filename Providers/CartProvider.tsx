@@ -23,6 +23,17 @@ interface CartContextProps {
   isCouponAdded: boolean;
   setIsCouponAdded: React.Dispatch<React.SetStateAction<boolean>>;
   clearCart: () => void;
+  removeItemFromCart: (
+    id: number,
+    Grade: string,
+    BagSize: string,
+    quantity: number,
+  ) => void;
+  removeEntireItemFromCart: (
+    id: number,
+    Grade: string,
+    BagSize: string,
+  ) => void;
 }
 
 export const CartContext = createContext<CartContextProps | undefined>(
@@ -82,11 +93,18 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
           price: product[0].price,
         },
         ...filteredCartItems,
-      ];
+      ].sort((a, b) => {
+        if (a.id !== b.id) {
+          return a.id - b.id;
+        }
+        if (a.Grade !== b.Grade) {
+          return a.Grade.localeCompare(b.Grade);
+        }
+        return a.BagSize.localeCompare(b.BagSize);
+      });
       setSelectedItems(newCartItems);
     } else {
       const newCartItems = [
-        ...selectedItems,
         {
           id: id,
           label: inventoryItem[0].label,
@@ -98,7 +116,16 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
             ? inventoryItem[0].discountedPrice
             : inventoryItem[0].price,
         },
-      ];
+        ...selectedItems,
+      ].sort((a, b) => {
+        if (a.id !== b.id) {
+          return a.id - b.id;
+        }
+        if (a.Grade !== b.Grade) {
+          return a.Grade.localeCompare(b.Grade);
+        }
+        return a.BagSize.localeCompare(b.BagSize);
+      });
       setSelectedItems(newCartItems);
     }
     const newSubTotal =
@@ -111,6 +138,87 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     setSubTotal(newSubTotal);
   };
 
+  const removeItemFromCart = (
+    id: number,
+    Grade: string,
+    BagSize: string,
+    quantity: number,
+  ) => {
+    const product = selectedItems.filter(
+      prod =>
+        prod.id === id && prod.Grade === Grade && prod.BagSize === BagSize,
+    );
+    if (!product) {
+      return;
+    }
+
+    const newSelectedItems = selectedItems
+      .filter(
+        prod =>
+          !(prod.id === id && prod.Grade === Grade && prod.BagSize === BagSize),
+      )
+      .sort((a, b) => {
+        if (a.id !== b.id) {
+          return a.id - b.id;
+        }
+        if (a.Grade !== b.Grade) {
+          return a.Grade.localeCompare(b.Grade);
+        }
+        return a.BagSize.localeCompare(b.BagSize);
+      });
+    if (product[0].quantity <= quantity) {
+      const price = product[0].quantity * product[0].price;
+      setSelectedItems(newSelectedItems);
+      setSubTotal(subTotal - price);
+    } else {
+      const changedProd = product[0];
+      changedProd.quantity -= quantity;
+      const price = product[0].price * quantity;
+      const newItems = [...newSelectedItems, {...changedProd}].sort((a, b) => {
+        if (a.id !== b.id) {
+          return a.id - b.id;
+        }
+        if (a.Grade !== b.Grade) {
+          return a.Grade.localeCompare(b.Grade);
+        }
+        return a.BagSize.localeCompare(b.BagSize);
+      });
+      setSelectedItems(newItems);
+      setSubTotal(subTotal - price);
+    }
+  };
+
+  const removeEntireItemFromCart = (
+    id: number,
+    Grade: string,
+    BagSize: string,
+  ) => {
+    const product = selectedItems.filter(
+      prod =>
+        prod.id === id && prod.Grade === Grade && prod.BagSize === BagSize,
+    );
+    if (!product) {
+      return;
+    }
+    const price = product[0].quantity * product[0].price;
+    const newSelectedItems = selectedItems
+      .filter(
+        prod =>
+          !(prod.id === id && prod.Grade === Grade && prod.BagSize === BagSize),
+      )
+      .sort((a, b) => {
+        if (a.id !== b.id) {
+          return a.id - b.id;
+        }
+        if (a.Grade !== b.Grade) {
+          return a.Grade.localeCompare(b.Grade);
+        }
+        return a.BagSize.localeCompare(b.BagSize);
+      });
+    setSelectedItems(newSelectedItems);
+    setSubTotal(subTotal - price);
+  };
+
   const value = {
     selectedItems,
     addItemToCart,
@@ -118,6 +226,8 @@ export const CartProvider: React.FC<CartProviderProps> = ({children}) => {
     isCouponAdded,
     setIsCouponAdded,
     clearCart,
+    removeItemFromCart,
+    removeEntireItemFromCart,
   };
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
 };

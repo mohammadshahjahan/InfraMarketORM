@@ -19,7 +19,7 @@ const Coupon: React.FC<CouponProps> = ({isCouponAdded, setIsCouponAdded}) => {
         {isCouponAdded ? (
           <Text style={CouponStyles.operation}>REMOVE</Text>
         ) : (
-          <Text style={CouponStyles.operation}>APPLY</Text>
+          <Text style={[CouponStyles.operation, {color: 'green'}]}>APPLY</Text>
         )}
       </TouchableOpacity>
     </View>

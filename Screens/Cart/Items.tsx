@@ -1,6 +1,7 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {QuantityVariableStyles} from '../ProductPageScreen/Quantity';
+import {useCartContext} from '../../Providers/CartProvider';
 
 interface ItemsProps {
   image: any;
@@ -19,7 +20,11 @@ const Items: React.FC<ItemsProps> = ({
   label,
   price,
   quantity,
+  id,
 }) => {
+  const {addItemToCart, removeItemFromCart, removeEntireItemFromCart} =
+    useCartContext();
+
   return (
     <View>
       <View
@@ -49,7 +54,7 @@ const Items: React.FC<ItemsProps> = ({
         <View style={{width: '60%'}}>
           <View style={QuantityVariableStyles.constainer}>
             <TouchableOpacity
-              // onPress={adder}
+              onPress={() => addItemToCart(id, Grade, BagSize, 10)}
               style={QuantityVariableStyles.operation}>
               <View>
                 <Text style={QuantityVariableStyles.text}>+</Text>
@@ -59,7 +64,7 @@ const Items: React.FC<ItemsProps> = ({
               <Text>{quantity}</Text>
             </View>
             <TouchableOpacity
-              // onPress={subtract}
+              onPress={() => removeItemFromCart(id, Grade, BagSize, 10)}
               style={QuantityVariableStyles.operation}>
               <View>
                 <Text style={QuantityVariableStyles.text}>-</Text>
@@ -80,9 +85,10 @@ const Items: React.FC<ItemsProps> = ({
               <Text style={{textAlign: 'right'}}>Total</Text>
               <Text style={{color: '#000'}}>₹{quantity * price}</Text>
             </View>
-            <View>
+            <TouchableOpacity
+              onPress={() => removeEntireItemFromCart(id, Grade, BagSize)}>
               <Text style={{color: '#f15927'}}>X</Text>
-            </View>
+            </TouchableOpacity>
           </View>
         </View>
       </View>
