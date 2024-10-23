@@ -114,7 +114,7 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
             </View>
             <View style={{flexDirection: 'column', gap: 10}}>
               <Text>Min Order Quantity</Text>
-              <Text style={{fontWeight: 600}}>1</Text>
+              <Text style={{fontWeight: 600}}>10</Text>
             </View>
             <View style={{flexDirection: 'column', gap: 10}}>
               <Text>Max Order Quantity</Text>
