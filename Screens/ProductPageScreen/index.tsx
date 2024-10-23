@@ -1,6 +1,12 @@
 import {RouteProp} from '@react-navigation/native';
 import React, {useEffect, useState} from 'react';
-import {ScrollView, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import {rootStackParamList} from '../../App';
 import {getData} from '../../utils/useProductIdUtils';
 import Star from './Star';
@@ -37,6 +43,10 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
     const price = product.discount ? product.discountedPrice : product.price;
     setAmount(price * quantity);
   }, [quantity, product.discount, product.discountedPrice, product.price]);
+
+  const alertSuccess = () => {
+    ToastAndroid.show('Item added successfully!', ToastAndroid.SHORT);
+  };
 
   return (
     <>
@@ -127,9 +137,10 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
           <View style={[QuantityVariableStyles.box]}>
             <TouchableOpacity
               style={[QuantityVariableStyles.box]}
-              onPress={() =>
-                addItemToCart(id, currGrade, currBagSize, quantity)
-              }>
+              onPress={() => {
+                addItemToCart(id, currGrade, currBagSize, quantity);
+                alertSuccess();
+              }}>
               <View
                 style={[
                   QuantityVariableStyles.box,
