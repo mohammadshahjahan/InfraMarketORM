@@ -16,10 +16,12 @@ export const CatalogStyles = StyleSheet.create({
     padding: 10,
     marginTop: 3,
   },
-  textInput: {
+  textInputContainer: {
+    // make a multiple 4 value
     borderWidth: 1,
     marginLeft: 17,
     borderColor: '#C4C4C4',
+    // make 100% then add margin
     width: '91%',
     borderRadius: 10,
     height: 50,

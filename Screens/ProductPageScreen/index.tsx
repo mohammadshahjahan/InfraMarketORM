@@ -15,9 +15,10 @@ import PriceBox from './PriceBox';
 import Specification from './Specification';
 import Quantity, {QuantityVariableStyles} from './Quantity';
 import ImageContainer from './ImageContainer';
-import {useCartContext} from '../../Providers/CartProvider';
 import Header from './Header';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
+import {useDispatch} from 'react-redux';
+import {addItemToCart} from '../../features/CartSlice';
 
 type ProductPageProps = {
   route: RouteProp<rootStackParamList, 'Product Details'>;
@@ -37,7 +38,7 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
   const [quantity, setQuantity] = useState(0);
   const [amount, setAmount] = useState(0);
 
-  const {addItemToCart} = useCartContext();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const price = product.discount ? product.discountedPrice : product.price;
@@ -138,7 +139,14 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
             <TouchableOpacity
               style={[QuantityVariableStyles.box]}
               onPress={() => {
-                addItemToCart(id, currGrade, currBagSize, quantity);
+                dispatch(
+                  addItemToCart({
+                    id: id,
+                    Grade: currGrade,
+                    BagSize: currBagSize,
+                    quantity: quantity,
+                  }),
+                );
                 alertSuccess();
               }}>
               <View

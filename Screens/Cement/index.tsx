@@ -1,22 +1,27 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {Image, TextInput, View} from 'react-native';
 import Header from './Header';
 import {CatalogStyles} from '../../Styles/CatalogStyles';
-import {useCementContext} from '../../Providers/CementProvider';
 import Products from './Products';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
+import {useDispatch} from 'react-redux';
+import {filterProductUsingSearch} from '../../features/CementsSlice';
 
 type CementProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
 };
 
 const Cement: React.FC<CementProps> = ({navigation}) => {
-  const {searchProduct, setSearchProduct} = useCementContext();
+  const [searchProduct, setSearchProduct] = useState<string>('');
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(filterProductUsingSearch(searchProduct));
+  }, [searchProduct, dispatch]);
   return (
     <View style={{height: '100%', backgroundColor: '#fff'}}>
       <Header navigation={navigation} />
-      <View style={[CatalogStyles.textInput]}>
+      <View style={[CatalogStyles.textInputContainer]}>
         <Image
           source={require('../../assests/Adornment.png')}
           style={{height: 25}}

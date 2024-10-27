@@ -11,6 +11,8 @@ type selectedParamsType = {
   Rating: string[];
 };
 
+// add redux
+
 interface TopDealsProducsState {
   productData: ProdutProps[];
   selectedParams: selectedParamsType;

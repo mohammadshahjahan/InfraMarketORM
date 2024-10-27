@@ -10,7 +10,8 @@ import {
 import {ProductSummaryStyles} from '../../Styles/ProductSummary';
 import {QuantityStyles} from '../../Styles/QuantityStyles';
 import {OverlayCartStyle} from '../../Styles/OverlayCartStyle';
-import {useCartContext} from '../../Providers/CartProvider';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 interface PaymentModeProps {
   step: number;
@@ -27,7 +28,9 @@ const PaymentMode: React.FC<PaymentModeProps> = ({
   step,
   setStep,
 }) => {
-  const {subTotal, isCouponAdded} = useCartContext();
+  const {subTotal, isCouponAdded} = useSelector(
+    (state: storeState) => state.CartReducer,
+  );
   const discount = isCouponAdded ? 0.2 * subTotal : 0;
   const price = subTotal + 500 - discount;
 

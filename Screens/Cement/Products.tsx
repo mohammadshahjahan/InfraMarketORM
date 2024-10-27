@@ -9,9 +9,11 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Product from '../../Components/Product';
-import {useCementContext} from '../../Providers/CementProvider';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
+import {sortByPrice} from '../../features/CementsSlice';
+import {storeState} from '../../store/store';
 
 type ProductsProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
@@ -28,8 +30,11 @@ interface ProductProps {
 
 const Products: React.FC<ProductsProps> = ({navigation}) => {
   const [col, _] = useState(2);
-  const {productData, sortByPrice} = useCementContext();
+  const productData = useSelector(
+    (state: storeState) => state.CementReducer.productData,
+  );
   const [filterOpen, setFilterOpen] = useState(false);
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={[styles.container]}>
@@ -58,7 +63,7 @@ const Products: React.FC<ProductsProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {
-              sortByPrice(-1);
+              dispatch(sortByPrice(-1));
               setFilterOpen(!filterOpen);
             }}>
             <Text style={styles.filterText}>High Price to Low Price</Text>
@@ -66,7 +71,7 @@ const Products: React.FC<ProductsProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {
-              sortByPrice(1);
+              dispatch(sortByPrice(1));
               setFilterOpen(!filterOpen);
             }}>
             <Text style={styles.filterText}>Low Price to High Price</Text>

@@ -1,14 +1,17 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {useCartContext} from '../../Providers/CartProvider';
 import {ProductSummaryStyles} from '../../Styles/ProductSummary';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 const ProductSummary = () => {
   const image = require('../../assests/CementBag.png');
-  const {subTotal, isCouponAdded, selectedItems} = useCartContext();
+  const {subTotal, isCouponAdded, selectedItems} = useSelector(
+    (state: storeState) => state.CartReducer,
+  );
   const discount = isCouponAdded ? 0.2 * subTotal : 0;
   const price = subTotal + 500 - discount;
   const {navigate} =

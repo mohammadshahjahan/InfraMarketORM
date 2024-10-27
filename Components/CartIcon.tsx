@@ -1,11 +1,12 @@
 import React, {useState} from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {useCartContext} from '../Providers/CartProvider';
 import {CatalogStyles} from '../Styles/CatalogStyles';
 import OverLayCart from './OverLayCart';
+import {storeState} from '../store/store';
+import {useSelector} from 'react-redux';
 
 const CartIcon = () => {
-  const {selectedItems} = useCartContext();
+  const {selectedItems} = useSelector((state: storeState) => state.CartReducer);
   const [openOverlay, setOpenOverlay] = useState(false);
   return (
     <View style={CatalogStyles.headerIcon}>

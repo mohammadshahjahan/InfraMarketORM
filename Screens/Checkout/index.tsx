@@ -1,20 +1,19 @@
 import React from 'react';
 import {View} from 'react-native';
 import EmptyCart from './EmptyCart';
-import {useCartContext} from '../../Providers/CartProvider';
 import {CheckoutStyles} from '../../Styles/CheckoutStyles';
-import ProductSummary from './ProductSummary';
 import Address from './Address';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 const Checkout = () => {
-  const {selectedItems} = useCartContext();
+  const {selectedItems} = useSelector((state: storeState) => state.CartReducer);
   return (
     <View style={{flex: 1}}>
       {selectedItems.length === 0 ? (
         <EmptyCart />
       ) : (
         <View style={CheckoutStyles.container}>
-          <ProductSummary />
           <Address />
         </View>
       )}

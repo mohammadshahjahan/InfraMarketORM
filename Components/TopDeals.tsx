@@ -9,9 +9,11 @@ import {
 } from 'react-native';
 import {SafeAreaView} from 'react-native-safe-area-context';
 import Product from './Product';
-import {useTopDealsContext} from '../Providers/TopDealsProvider';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../App';
+import {useDispatch, useSelector} from 'react-redux';
+import {sortByPrice} from '../features/TopDealsSlice';
+import {storeState} from '../store/store';
 
 type TopDealsProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
@@ -26,22 +28,13 @@ interface ProductProps {
   id: number;
 }
 
-// const renderProduct = ({item}: {item: ProductProps}) => (
-//   <Product
-//     discount={item.discount}
-//     imageSrc={item.imageSrc}
-//     label={item.label}
-//     price={item.price}
-//     discountedPrice={item.discountedPrice}
-//     id={item.id}
-//   />
-// );
-
 const TopDeals: React.FC<TopDealsProps> = ({navigation}) => {
   const [col, _] = useState(2);
-  const {productData} = useTopDealsContext();
   const [filterOpen, setFilterOpen] = useState(false);
-  const {sortByPrice} = useTopDealsContext();
+  const productData = useSelector(
+    (state: storeState) => state.topDealsReducer.productData,
+  );
+  const dispatch = useDispatch();
 
   return (
     <SafeAreaView style={styles.container}>
@@ -71,7 +64,7 @@ const TopDeals: React.FC<TopDealsProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {
-              sortByPrice(-1);
+              dispatch(sortByPrice(-1));
               setFilterOpen(!filterOpen);
             }}>
             <Text style={styles.filterText}>High Price to Low Price</Text>
@@ -79,7 +72,7 @@ const TopDeals: React.FC<TopDealsProps> = ({navigation}) => {
           <TouchableOpacity
             style={styles.sortButton}
             onPress={() => {
-              sortByPrice(1);
+              dispatch(sortByPrice(1));
               setFilterOpen(!filterOpen);
             }}>
             <Text style={styles.filterText}>Low Price to High Price</Text>

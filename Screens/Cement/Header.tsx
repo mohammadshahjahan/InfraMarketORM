@@ -1,17 +1,20 @@
 import React from 'react';
 import {CatalogStyles} from '../../Styles/CatalogStyles';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useCementContext} from '../../Providers/CementProvider';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
 import CartIcon from '../../Components/CartIcon';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 type HeaderProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
 };
 
 const Header: React.FC<HeaderProps> = ({navigation}) => {
-  const {productData} = useCementContext();
+  const productData = useSelector(
+    (state: storeState) => state.CementReducer.productData,
+  );
   return (
     <View style={sty.header}>
       <View style={sty.titleBar}>

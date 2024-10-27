@@ -1,15 +1,16 @@
 /* eslint-disable react-native/no-inline-styles */
 import React from 'react';
 import {Text, View} from 'react-native';
-import {useCartContext} from '../../Providers/CartProvider';
 import {QuantityStyles} from '../../Styles/QuantityStyles';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 interface InvoiceProps {
   isCouponAdded: boolean;
 }
 
 const Invoice: React.FC<InvoiceProps> = ({isCouponAdded}) => {
-  const {subTotal} = useCartContext();
+  const {subTotal} = useSelector((state: storeState) => state.CartReducer);
   const disCount = isCouponAdded
     ? parseInt((subTotal * 0.2).toFixed(0), 10)
     : 0;
