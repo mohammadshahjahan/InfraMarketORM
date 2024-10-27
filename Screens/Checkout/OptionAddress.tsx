@@ -11,7 +11,8 @@ import {ADDRESS} from '../../assests/ADDRESS';
 import {ProductSummaryStyles} from '../../Styles/ProductSummary';
 import {QuantityStyles} from '../../Styles/QuantityStyles';
 import {OverlayCartStyle} from '../../Styles/OverlayCartStyle';
-import {useCartContext} from '../../Providers/CartProvider';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 interface OptionsAddressProps {
   step: number;
@@ -28,7 +29,9 @@ const OptionsAddress: React.FC<OptionsAddressProps> = ({
   step,
   setStep,
 }) => {
-  const {subTotal, isCouponAdded} = useCartContext();
+  const {subTotal, isCouponAdded} = useSelector(
+    (state: storeState) => state.CartReducer,
+  );
   const discount = isCouponAdded ? 0.2 * subTotal : 0;
   const price = subTotal + 500 - discount;
 

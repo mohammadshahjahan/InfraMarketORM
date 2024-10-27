@@ -10,7 +10,7 @@ export const ITEMS_DATA = [
     Brand: 'ACC',
     Grade: 'OPC 33',
     Weight: '20 Kg',
-    Rating: '1 ⭐️',
+    Rating: '1 ⭐️', // make a icon
   },
   {
     id: 2,

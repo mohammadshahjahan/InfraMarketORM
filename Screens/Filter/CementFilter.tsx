@@ -1,28 +1,36 @@
 import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {topDealsFilterStyles} from '../../Styles/TopDealsFilterStyles';
-
-import {useCementContext} from '../../Providers/CementProvider';
 import FilterBox from '../Cement/FilterBox';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  filterProductsHandler,
+  setSelectedParams,
+} from '../../features/CementsSlice';
+import {storeState} from '../../store/store';
 
 type CementFilterProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
 };
 
 const CementFilter: React.FC<CementFilterProps> = ({navigation}) => {
-  const {selectedParams, setSelectedParams} = useCementContext();
-
+  const selectedParams = useSelector(
+    (state: storeState) => state.CementReducer.selectedParams,
+  );
+  const dispatch = useDispatch();
   const [selectedParamsSub, setSelectedParamsSub] = useState(selectedParams);
   const clearAllHandler = () => {
-    setSelectedParams({
-      Brand: [],
-      Grade: [],
-      Weight: [],
-      Price: [],
-      Rating: [],
-    });
+    dispatch(
+      setSelectedParams({
+        Brand: [],
+        Grade: [],
+        Weight: [],
+        Price: [],
+        Rating: [],
+      }),
+    );
     setSelectedParamsSub({
       Brand: [],
       Grade: [],
@@ -58,9 +66,8 @@ const CementFilter: React.FC<CementFilterProps> = ({navigation}) => {
         <TouchableOpacity
           style={topDealsFilterStyles.button2}
           onPress={() => {
-            //console.log(selectedParamsSub);
-            setSelectedParams(selectedParamsSub);
-            //console.log(selectedParams);
+            dispatch(setSelectedParams(selectedParamsSub));
+            dispatch(filterProductsHandler());
             navigation.goBack();
           }}>
           <Text style={topDealsFilterStyles.filterText2}>Apply</Text>

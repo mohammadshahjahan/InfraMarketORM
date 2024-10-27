@@ -1,19 +1,20 @@
 import React from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import {OverlayCartStyle} from '../Styles/OverlayCartStyle';
-import {useCartContext} from '../Providers/CartProvider';
 import {QuantityStyles} from '../Styles/QuantityStyles';
 import OverLayCartItem from './OverLayCartItem';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../App';
+import {useSelector} from 'react-redux';
+import {storeState} from '../store/store';
 
 interface OverLayCartProps {
   setOpenOverlay: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const OverLayCart: React.FC<OverLayCartProps> = ({setOpenOverlay}) => {
-  const {selectedItems} = useCartContext();
+  const {selectedItems} = useSelector((state: storeState) => state.CartReducer);
   const navigation =
     useNavigation<NativeStackNavigationProp<rootStackParamList>>();
   return (

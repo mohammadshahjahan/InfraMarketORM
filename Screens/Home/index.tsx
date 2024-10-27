@@ -14,6 +14,7 @@ const Home: React.FC<HomeProps> = ({navigation}) => {
     <View style={{height: '100%'}}>
       <SafeAreaView style={{backgroundColor: '#fff'}}>
         <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+        {/* make a header */}
         <Catalog navigation={navigation} />
       </SafeAreaView>
     </View>

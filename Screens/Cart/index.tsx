@@ -1,7 +1,6 @@
 import React from 'react';
 import {FlatList, Text, TouchableOpacity, View} from 'react-native';
 import Coupon from './Coupon';
-import {useCartContext} from '../../Providers/CartProvider';
 import {CartStyles} from '../../Styles/CartStyles';
 import Invoice from './Invoice';
 import {OverlayCartStyle} from '../../Styles/OverlayCartStyle';
@@ -11,10 +10,16 @@ import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from 'react-native-screens/lib/typescript/native-stack/types';
 import {rootStackParamList} from '../../App';
 import EmptyCart from './EmptyCart';
+import {useSelector} from 'react-redux';
+import {storeState} from '../../store/store';
 
 const Cart = () => {
-  const {selectedItems, subTotal, isCouponAdded, setIsCouponAdded} =
-    useCartContext();
+  // const {selectedItems, subTotal, isCouponAdded, setIsCouponAdded} =
+  //   useCartContext();
+
+  const {selectedItems, subTotal, isCouponAdded} = useSelector(
+    (state: storeState) => state.CartReducer,
+  );
   const disCount = isCouponAdded
     ? parseInt((subTotal * 0.2).toFixed(0), 10)
     : 0;
@@ -48,10 +53,7 @@ const Cart = () => {
           </View>
 
           <View style={{}}>
-            <Coupon
-              isCouponAdded={isCouponAdded}
-              setIsCouponAdded={setIsCouponAdded}
-            />
+            <Coupon isCouponAdded={isCouponAdded} />
             <Invoice isCouponAdded={isCouponAdded} />
           </View>
           <View style={CartStyles.bottom}>

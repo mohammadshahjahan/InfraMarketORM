@@ -2,26 +2,35 @@ import React, {useState} from 'react';
 import {Text, TouchableOpacity, View} from 'react-native';
 import {topDealsFilterStyles} from '../../Styles/TopDealsFilterStyles';
 import FilterBox from '../../Components/FilterBox';
-import {useTopDealsContext} from '../../Providers/TopDealsProvider';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
+import {useDispatch, useSelector} from 'react-redux';
+import {
+  filterProductsHandler,
+  setSelectedParams,
+} from '../../features/TopDealsSlice';
+import {storeState} from '../../store/store';
 
 type TopDealsFilterProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
 };
 
 const TopDealsFilter: React.FC<TopDealsFilterProps> = ({navigation}) => {
-  const {selectedParams, setSelectedParams} = useTopDealsContext();
-
+  const selectedParams = useSelector(
+    (state: storeState) => state.topDealsReducer.selectedParams,
+  );
+  const dispatch = useDispatch();
   const [selectedParamsSub, setSelectedParamsSub] = useState(selectedParams);
   const clearAllHandler = () => {
-    setSelectedParams({
-      Brand: [],
-      Grade: [],
-      Weight: [],
-      Price: [],
-      Rating: [],
-    });
+    dispatch(
+      setSelectedParams({
+        Brand: [],
+        Grade: [],
+        Weight: [],
+        Price: [],
+        Rating: [],
+      }),
+    );
     setSelectedParamsSub({
       Brand: [],
       Grade: [],
@@ -57,9 +66,8 @@ const TopDealsFilter: React.FC<TopDealsFilterProps> = ({navigation}) => {
         <TouchableOpacity
           style={topDealsFilterStyles.button2}
           onPress={() => {
-            //console.log(selectedParamsSub);
-            setSelectedParams(selectedParamsSub);
-            //console.log(selectedParams);
+            dispatch(setSelectedParams(selectedParamsSub));
+            dispatch(filterProductsHandler());
             navigation.goBack();
           }}>
           <Text style={topDealsFilterStyles.filterText2}>Apply</Text>

@@ -1,7 +1,12 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
 import {QuantityVariableStyles} from '../ProductPageScreen/Quantity';
-import {useCartContext} from '../../Providers/CartProvider';
+import {useDispatch} from 'react-redux';
+import {
+  addItemToCart,
+  removeEntireItemFromCart,
+  removeItemFromCart,
+} from '../../features/CartSlice';
 
 interface ItemsProps {
   image: any;
@@ -22,8 +27,7 @@ const Items: React.FC<ItemsProps> = ({
   quantity,
   id,
 }) => {
-  const {addItemToCart, removeItemFromCart, removeEntireItemFromCart} =
-    useCartContext();
+  const dispatch = useDispatch();
 
   return (
     <View>
@@ -54,7 +58,9 @@ const Items: React.FC<ItemsProps> = ({
         <View style={{width: '60%'}}>
           <View style={QuantityVariableStyles.constainer}>
             <TouchableOpacity
-              onPress={() => addItemToCart(id, Grade, BagSize, 10)}
+              onPress={() =>
+                dispatch(addItemToCart({id, Grade, BagSize, quantity: 10}))
+              }
               style={QuantityVariableStyles.operation}>
               <View>
                 <Text style={QuantityVariableStyles.text}>+</Text>
@@ -64,7 +70,9 @@ const Items: React.FC<ItemsProps> = ({
               <Text>{quantity}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => removeItemFromCart(id, Grade, BagSize, 10)}
+              onPress={() =>
+                dispatch(removeItemFromCart({id, Grade, BagSize, quantity: 10}))
+              }
               style={QuantityVariableStyles.operation}>
               <View>
                 <Text style={QuantityVariableStyles.text}>-</Text>
@@ -86,7 +94,9 @@ const Items: React.FC<ItemsProps> = ({
               <Text style={{color: '#000'}}>₹{quantity * price}</Text>
             </View>
             <TouchableOpacity
-              onPress={() => removeEntireItemFromCart(id, Grade, BagSize)}>
+              onPress={() =>
+                dispatch(removeEntireItemFromCart({id, Grade, BagSize}))
+              }>
               <Text style={{color: '#f15927'}}>X</Text>
             </TouchableOpacity>
           </View>
