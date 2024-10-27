@@ -14,7 +14,6 @@ import Cement from './Screens/Cement/index';
 import CementFilter from './Screens/Filter/CementFilter';
 import OutOfStock from './Components/OutOfStock';
 import ProductPage from './Screens/ProductPageScreen/index';
-import {CartProvider} from './Providers/CartProvider';
 import Cart from './Screens/Cart/index';
 import Checkout from './Screens/Checkout/index';
 import {Provider} from 'react-redux';
@@ -37,45 +36,40 @@ function App(): React.JSX.Element {
   const Stack = createNativeStackNavigator<rootStackParamList>();
   return (
     <Provider store={store}>
-      <CartProvider>
-        <NavigationContainer>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen
-              name="Home"
-              component={Home}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="TopDealsFilter"
-              component={TopDealsFilter}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="Cement"
-              component={Cement}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen
-              name="CementFilter"
-              component={CementFilter}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="Walling Solutions" component={OutOfStock} />
-            <Stack.Screen
-              name="Construction Chemicals"
-              component={OutOfStock}
-            />
-            <Stack.Screen name="Steel" component={OutOfStock} />
-            <Stack.Screen
-              name="Product Details"
-              component={ProductPage}
-              options={{headerShown: false}}
-            />
-            <Stack.Screen name="Your Cart" component={Cart} />
-            <Stack.Screen name="Checkout" component={Checkout} />
-          </Stack.Navigator>
-        </NavigationContainer>
-      </CartProvider>
+      <NavigationContainer>
+        <Stack.Navigator initialRouteName="Home">
+          <Stack.Screen
+            name="Home"
+            component={Home}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="TopDealsFilter"
+            component={TopDealsFilter}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="Cement"
+            component={Cement}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen
+            name="CementFilter"
+            component={CementFilter}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="Walling Solutions" component={OutOfStock} />
+          <Stack.Screen name="Construction Chemicals" component={OutOfStock} />
+          <Stack.Screen name="Steel" component={OutOfStock} />
+          <Stack.Screen
+            name="Product Details"
+            component={ProductPage}
+            options={{headerShown: false}}
+          />
+          <Stack.Screen name="Your Cart" component={Cart} />
+          <Stack.Screen name="Checkout" component={Checkout} />
+        </Stack.Navigator>
+      </NavigationContainer>
     </Provider>
   );
 }
