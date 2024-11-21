@@ -87,5 +87,8 @@ export const topDealsFilterStyles = StyleSheet.create({
   },
   filterParamText: {
     fontWeight: 'normal',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

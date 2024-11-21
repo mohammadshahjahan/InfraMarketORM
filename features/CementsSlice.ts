@@ -1,8 +1,11 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { ITEMS_DATA } from "../assests/ITEMS_DATA"; 
+import axios from "axios";
+import { BACKENDURL } from "../constants";
 
 interface InitialState {
     productData: typeof ITEMS_DATA;
+    fetchProducts: typeof ITEMS_DATA;
     selectedParams: {
         Brand: string[];
         Grade: string[];
@@ -10,10 +13,12 @@ interface InitialState {
         Price: string[];
         Rating: string[];
     };
+    loading : string
 }
 
 const initialState: InitialState = {
-    productData: ITEMS_DATA,
+    productData: [],
+    fetchProducts: [],
     selectedParams: {
         Brand: [],
         Grade: [],
@@ -21,6 +26,7 @@ const initialState: InitialState = {
         Price: [],
         Rating: [],
     },
+    loading:'true',
 };
 
 export const cementSlice = createSlice({
@@ -28,7 +34,7 @@ export const cementSlice = createSlice({
     initialState,
     reducers: {
         filterProductUsingSearch: (state, action) => {
-            let newFilteredData = ITEMS_DATA;
+            let newFilteredData = state.fetchProducts;
             if (action.payload) {
                 newFilteredData = newFilteredData.filter(product =>
                   product.label
@@ -44,28 +50,28 @@ export const cementSlice = createSlice({
             state.selectedParams = action.payload;
         },
         filterProductsHandler: (state) => {
-            let newFilteredData = ITEMS_DATA;
+            let newFilteredData = state.fetchProducts;
 
             if (state.selectedParams.Brand.length > 0) {
             newFilteredData = newFilteredData.filter(product =>
-                state.selectedParams.Brand.includes(product.Brand),
+                state.selectedParams.Brand.includes(product.brand),
             );
             }
 
             if (state.selectedParams.Grade.length > 0) {
             newFilteredData = newFilteredData.filter(product =>
-                state.selectedParams.Grade.includes(product.Grade),
+                state.selectedParams.Grade.includes(product.grade),
             );
             }
             if (state.selectedParams.Rating.length > 0) {
             newFilteredData = newFilteredData.filter(product =>
-                state.selectedParams.Rating.includes(product.Rating),
+                state.selectedParams.Rating.includes(product.rating),
             );
             }
 
             if (state.selectedParams.Weight.length > 0) {
             newFilteredData = newFilteredData.filter(product =>
-                state.selectedParams.Weight.includes(product.Weight),
+                state.selectedParams.Weight.includes(product.weight),
             );
             }
 
@@ -96,8 +102,33 @@ export const cementSlice = createSlice({
               state.productData = newProducts;
         },
     },
-
+    extraReducers(builder){
+        builder
+        .addCase(fetchCementProducts.pending,(state, _) => {
+            state.loading = 'true';
+            console.log('Loading');
+        })
+        .addCase(fetchCementProducts.fulfilled,(state, action) => {
+            state.productData = action.payload;
+            state.fetchProducts = action.payload;
+            state.loading = 'false';
+        })
+        .addCase(fetchCementProducts.rejected,(state,action) => {
+            state.loading = 'true';
+            console.log('XD, You not able to fetch Cement products, Thats a L');
+            console.log(action.error);
+        });
+    },
 });
+
+export const fetchCementProducts = createAsyncThunk('/fetchCementProducts',async()=>{
+    try {
+        const fetchedProducts = await axios.get(BACKENDURL + '/getAllProducts');
+        return fetchedProducts.data;
+    } catch (error:any) {
+        return error.message;
+    }
+  });
 
 
 export const {filterProductUsingSearch,filterProductsHandler,sortByPrice,setSelectedParams} = cementSlice.actions;

@@ -7,6 +7,7 @@ import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
 import {useDispatch} from 'react-redux';
 import {filterProductUsingSearch} from '../../features/CementsSlice';
+import {AppDispatch} from '../../store/store';
 
 type CementProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
@@ -14,10 +15,12 @@ type CementProps = {
 
 const Cement: React.FC<CementProps> = ({navigation}) => {
   const [searchProduct, setSearchProduct] = useState<string>('');
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
   useEffect(() => {
     dispatch(filterProductUsingSearch(searchProduct));
   }, [searchProduct, dispatch]);
+
   return (
     <View style={{height: '100%', backgroundColor: '#fff'}}>
       <Header navigation={navigation} />

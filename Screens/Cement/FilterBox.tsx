@@ -70,6 +70,7 @@ const FilterBox: React.FC<FilterBoxProps> = ({
               label={item}
               isSelected={selectedParams[selectedFilter].includes(item)}
               onToggleSelection={toggleSelection}
+              isRating={selectedFilter === 'Rating'}
             />
           )}
           keyExtractor={(item, index) => index.toString()}

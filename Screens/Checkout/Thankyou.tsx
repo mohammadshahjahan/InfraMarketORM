@@ -1,12 +1,14 @@
 import React from 'react';
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {useCartContext} from '../../Providers/CartProvider';
 import {useNavigation} from '@react-navigation/native';
 import {NativeStackNavigationProp} from 'react-native-screens/lib/typescript/native-stack/types';
 import {rootStackParamList} from '../../App';
+import {useDispatch} from 'react-redux';
+import {AppDispatch} from '../../store/store';
+import {setCartEmpty} from '../../features/CartSlice';
 
 const Thankyou = () => {
-  const {clearCart} = useCartContext();
+  const dispatch = useDispatch<AppDispatch>();
   const {popToTop} =
     useNavigation<NativeStackNavigationProp<rootStackParamList>>();
   return (
@@ -18,7 +20,7 @@ const Thankyou = () => {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            clearCart();
+            dispatch(setCartEmpty());
             popToTop();
           }}>
           <Text style={{color: '#f15927'}}> CONTINUE SHOPPING </Text>

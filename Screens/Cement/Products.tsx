@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Text,
@@ -12,8 +12,8 @@ import Product from '../../Components/Product';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {rootStackParamList} from '../../App';
 import {useDispatch, useSelector} from 'react-redux';
-import {sortByPrice} from '../../features/CementsSlice';
-import {storeState} from '../../store/store';
+import {fetchCementProducts, sortByPrice} from '../../features/CementsSlice';
+import {AppDispatch, storeState} from '../../store/store';
 
 type ProductsProps = {
   navigation: NativeStackNavigationProp<rootStackParamList>;
@@ -30,32 +30,42 @@ interface ProductProps {
 
 const Products: React.FC<ProductsProps> = ({navigation}) => {
   const [col, _] = useState(2);
-  const productData = useSelector(
-    (state: storeState) => state.CementReducer.productData,
+  const {productData, loading} = useSelector(
+    (state: storeState) => state.CementReducer,
   );
   const [filterOpen, setFilterOpen] = useState(false);
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
+
+  useEffect(() => {
+    dispatch(fetchCementProducts());
+  }, [dispatch]);
 
   return (
     <SafeAreaView style={[styles.container]}>
-      <FlatList
-        contentContainerStyle={{paddingBottom: 20}}
-        data={productData}
-        renderItem={({item}: {item: ProductProps}) => (
-          <Product
-            discount={item.discount}
-            imageSrc={item.imageSrc}
-            label={item.label}
-            price={item.price}
-            discountedPrice={item.discountedPrice}
-            id={item.id}
-          />
-        )}
-        keyExtractor={(item, index) => index.toString()}
-        ItemSeparatorComponent={() => <View style={{height: 20}} />}
-        numColumns={col}
-        scrollEnabled
-      />
+      {loading === 'true' ? (
+        <Text>Loading...</Text>
+      ) : productData.length === 0 ? (
+        <Text>No Products</Text>
+      ) : (
+        <FlatList
+          contentContainerStyle={{paddingBottom: 20}}
+          data={productData}
+          renderItem={({item}: {item: ProductProps}) => (
+            <Product
+              discount={item.discount}
+              imageSrc={require('../../assests/CementBag.png')}
+              label={item.label}
+              price={item.price}
+              discountedPrice={item.discountedPrice}
+              id={item.id}
+            />
+          )}
+          keyExtractor={(item, index) => index.toString()}
+          ItemSeparatorComponent={() => <View style={{height: 20}} />}
+          numColumns={col}
+          scrollEnabled
+        />
+      )}
       <View style={{height: 27}}></View>
 
       <View style={styles.bottomContainer}>

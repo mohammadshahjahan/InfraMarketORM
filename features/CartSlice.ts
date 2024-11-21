@@ -170,10 +170,15 @@ export const CartSlice = createSlice({
         setIsCouponAdded: (state, action) => {
             state.isCouponAdded = action.payload;
         },
+        setCartEmpty: (state) => {
+          state.subTotal = 0;
+          state.selectedItems = [];
+          state.isCouponAdded = true;
+        }
 }});
 
 
-export const {addItemToCart,removeEntireItemFromCart,removeItemFromCart, setIsCouponAdded} = CartSlice.actions;
+export const {addItemToCart,removeEntireItemFromCart,removeItemFromCart, setIsCouponAdded, setCartEmpty} = CartSlice.actions;
 
 const CartReducer = CartSlice.reducer;
 
