@@ -38,7 +38,7 @@ const OverLayCart: React.FC<OverLayCartProps> = ({setOpenOverlay}) => {
               <OverLayCartItem
                 BagSize={item.BagSize}
                 Grade={item.Grade}
-                image={item.image}
+                image={require('../assests/CementBag.png')}
                 label={item.label}
                 price={item.price}
                 quantity={item.quantity}

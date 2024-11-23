@@ -1,18 +1,30 @@
 import React, {useState} from 'react';
-import {View} from 'react-native';
+import {Image, TouchableOpacity, View} from 'react-native';
 import OptionsAddress from './OptionAddress';
 import PaymentMode from './PaymentMode';
 import Thankyou from './Thankyou';
 import ProductSummary from './ProductSummary';
 
 const Address = () => {
-  const [shipping, setShipping] = useState<string>('');
-  const [billing, setBilling] = useState<string>('');
-  const [payMethod, setPayMethod] = useState<string>('');
+  const [shipping, setShipping] = useState<number | undefined>(undefined);
+  const [billing, setBilling] = useState<number | undefined>(undefined);
+  const [payMethod, setPayMethod] = useState<number | undefined>(undefined);
   const [step, setStep] = useState(1);
+
   return (
     <>
       {step < 4 && <ProductSummary />}
+
+      {step > 1 && (
+        <View>
+          <TouchableOpacity
+            onPress={() => {
+              setStep(step - 1);
+            }}>
+            <Image source={require('../../assests/BackButton.png')} />
+          </TouchableOpacity>
+        </View>
+      )}
 
       <View style={{flex: 1}}>
         {step === 1 && (

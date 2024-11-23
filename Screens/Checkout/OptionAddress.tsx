@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {ADDRESS} from '../../assests/ADDRESS';
 import {ProductSummaryStyles} from '../../Styles/ProductSummary';
 import {QuantityStyles} from '../../Styles/QuantityStyles';
 import {OverlayCartStyle} from '../../Styles/OverlayCartStyle';
@@ -16,8 +15,8 @@ import {storeState} from '../../store/store';
 
 interface OptionsAddressProps {
   step: number;
-  selectedAddress: string;
-  setSelectedAddress: React.Dispatch<React.SetStateAction<string>>;
+  selectedAddress: number | undefined;
+  setSelectedAddress: React.Dispatch<React.SetStateAction<number | undefined>>;
   label: string;
   setStep: React.Dispatch<React.SetStateAction<number>>;
 }
@@ -42,69 +41,82 @@ const OptionsAddress: React.FC<OptionsAddressProps> = ({
     }
     setStep(step + 1);
   };
+
+  const {billingAddress, loading, shippingAddress} = useSelector(
+    (state: storeState) => state.CheckoutReducer,
+  );
+
   return (
-    <View style={[{margin: 10, paddingHorizontal: 5, flex: 1}]}>
-      <View style={ProductSummaryStyles.imageContainer}>
-        <View
-          style={{
-            borderRadius: 50,
-            backgroundColor: '#f15927',
-            paddingHorizontal: 5,
-          }}>
-          <Text style={{color: '#fff'}}>{step}</Text>
-        </View>
-        <View>
-          <Text style={{color: '#000', fontWeight: '600', fontSize: 15}}>
-            {label}
-          </Text>
-        </View>
-      </View>
-      <View style={{maxHeight: 420, marginVertical: 15}}>
-        <FlatList
-          data={ADDRESS}
-          renderItem={({item}) => (
-            <TouchableOpacity
-              style={
-                item.name === selectedAddress ? styles.selected : styles.normal
-              }
-              onPress={() => setSelectedAddress(item.name)}>
-              <View>
+    <>
+      {loading === 'true' ? (
+        <Text>Loading...</Text>
+      ) : (
+        <View style={[{margin: 10, paddingHorizontal: 5, flex: 1}]}>
+          <View style={ProductSummaryStyles.imageContainer}>
+            <View
+              style={{
+                borderRadius: 50,
+                backgroundColor: '#f15927',
+                paddingHorizontal: 5,
+              }}>
+              <Text style={{color: '#fff'}}>{step}</Text>
+            </View>
+            <View>
+              <Text style={{color: '#000', fontWeight: '600', fontSize: 15}}>
+                {label}
+              </Text>
+            </View>
+          </View>
+          <View style={{maxHeight: 420, marginVertical: 15}}>
+            <FlatList
+              data={step === 1 ? shippingAddress : billingAddress}
+              renderItem={({item}) => (
+                <TouchableOpacity
+                  style={
+                    item.id === selectedAddress
+                      ? styles.selected
+                      : styles.normal
+                  }
+                  onPress={() => setSelectedAddress(item.id)}>
+                  {/* <View>
                 <Text
                   style={{color: '#000', fontWeight: '600', marginBottom: 5}}>
                   {item.name}
                 </Text>
-              </View>
-              <View>
-                <Text>{item.address}</Text>
-              </View>
+              </View> */}
+                  <View>
+                    <Text>{item.address}</Text>
+                  </View>
+                </TouchableOpacity>
+              )}
+              ItemSeparatorComponent={() => <View style={{height: 10}} />}
+            />
+          </View>
+          <View
+            style={[
+              {
+                bottom: 0,
+                position: 'absolute',
+                width: '100%',
+                borderTopWidth: 1,
+              },
+              QuantityStyles.container,
+            ]}>
+            <Text style={{fontWeight: '600', fontSize: 15, color: '#000'}}>
+              ₹ {price}
+            </Text>
+            <TouchableOpacity
+              onPress={continueHandler}
+              style={[
+                OverlayCartStyle.button,
+                {backgroundColor: '#f15927', marginTop: 5},
+              ]}>
+              <Text style={{color: '#fff'}}>CONTINUE</Text>
             </TouchableOpacity>
-          )}
-          ItemSeparatorComponent={() => <View style={{height: 10}} />}
-        />
-      </View>
-      <View
-        style={[
-          {
-            bottom: 0,
-            position: 'absolute',
-            width: '100%',
-            borderTopWidth: 1,
-          },
-          QuantityStyles.container,
-        ]}>
-        <Text style={{fontWeight: '600', fontSize: 15, color: '#000'}}>
-          ₹ {price}
-        </Text>
-        <TouchableOpacity
-          onPress={continueHandler}
-          style={[
-            OverlayCartStyle.button,
-            {backgroundColor: '#f15927', marginTop: 5},
-          ]}>
-          <Text style={{color: '#fff'}}>CONTINUE</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+          </View>
+        </View>
+      )}
+    </>
   );
 };
 export default OptionsAddress;

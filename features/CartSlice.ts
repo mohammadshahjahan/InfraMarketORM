@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { ITEMS_DATA } from "../assests/ITEMS_DATA";
 
 
 interface CartItemsProps {
@@ -29,11 +28,10 @@ export const CartSlice = createSlice({
     initialState,
     reducers:{
         addItemToCart : (state, action) => {
-            const { id, Grade, BagSize, quantity} = action.payload;
+            const { id, Grade, BagSize, quantity, inventoryItem} = action.payload;
             if (quantity === 0) {
                 return;
               }
-            const inventoryItem = ITEMS_DATA.filter(prod => prod.id === id);
             const product = state.selectedItems.filter(
                 prod =>
                   prod.id === id && prod.Grade === Grade && prod.BagSize === BagSize,

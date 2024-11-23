@@ -40,7 +40,7 @@ const Cart = () => {
                   BagSize={item.BagSize}
                   Grade={item.Grade}
                   id={item.id}
-                  image={item.image}
+                  image={require('../../assests/CementBag.png')}
                   label={item.label}
                   price={item.price}
                   quantity={item.quantity}

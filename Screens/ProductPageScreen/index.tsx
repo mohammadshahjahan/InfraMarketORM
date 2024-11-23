@@ -8,7 +8,7 @@ import {
   View,
 } from 'react-native';
 import {rootStackParamList} from '../../App';
-import {getData} from '../../utils/useProductIdUtils';
+import {useGetData} from '../../utils/useProductIdUtils';
 import Star from './Star';
 import {ProductScreenPageStyles} from '../../Styles/ProductPageScreenStyles';
 import PriceBox from './PriceBox';
@@ -27,8 +27,8 @@ type ProductPageProps = {
 
 const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
   const id = route.params.id;
-  const product = getData(id);
-  const skuIdRandom = '1234QWE';
+  const product = useGetData(id);
+  const skuIdRandom = '12';
 
   const Grade = ['OPC 33', 'UOPC 43', 'OPC 53'];
   const BagSize = ['20 Kg', '30 Kg', '40 Kg', '50 Kg'];
@@ -57,7 +57,7 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
           <ImageContainer />
           <View style={{flexDirection: 'row', gap: 20}}>
             <ProductLabels label="SKU ID" value={skuIdRandom} />
-            <ProductLabels label="Brand" value={product.Brand} />
+            <ProductLabels label="Brand" value={product.brand} />
           </View>
           <View>
             <Text style={{fontWeight: 600, fontSize: 25, color: '#000'}}>
@@ -66,11 +66,11 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
           </View>
           <View style={ProductScreenPageStyles.ratingContaner}>
             <View style={ProductScreenPageStyles.reviewContainer}>
-              <Star star={parseInt(product.Rating.substring(0, 1), 10)} />
+              <Star star={parseInt(product.rating.substring(0, 1), 10)} />
               <Text>
                 {' '}
                 <Text style={{fontWeight: 600}}>
-                  {product.Rating.substring(0, 1)}
+                  {product.rating.substring(0, 1)}
                 </Text>
                 (<Text>2 Reviews</Text>)
               </Text>
@@ -145,6 +145,7 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
                     Grade: currGrade,
                     BagSize: currBagSize,
                     quantity: quantity,
+                    inventoryItem: [product],
                   }),
                 );
                 alertSuccess();
