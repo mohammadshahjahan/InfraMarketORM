@@ -19,6 +19,8 @@ import Header from './Header';
 import {NativeStackNavigationProp} from '@react-navigation/native-stack';
 import {useDispatch} from 'react-redux';
 import {addItemToCart} from '../../features/CartSlice';
+import axios from 'axios';
+import {BACKENDURL} from '../../constants';
 
 type ProductPageProps = {
   route: RouteProp<rootStackParamList, 'Product Details'>;
@@ -27,8 +29,8 @@ type ProductPageProps = {
 
 const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
   const id = route.params.id;
-  const product = useGetData(id);
-  const skuIdRandom = '12';
+  const [product, setProduct] = useState(useGetData(id));
+  const skuIdRandom = id.toString();
 
   const Grade = ['OPC 33', 'UOPC 43', 'OPC 53'];
   const BagSize = ['20 Kg', '30 Kg', '40 Kg', '50 Kg'];
@@ -40,6 +42,31 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
 
   const dispatch = useDispatch();
 
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    setLoading(true);
+    const fetchProductDetails = async () => {
+      const res = await axios.get(
+        BACKENDURL +
+          `/getProduct?product_id=${id}&bagSize=${currBagSize.substring(
+            0,
+            2,
+          )}&grade=${currGrade}`,
+      );
+      setProduct(prevProduct => ({
+        ...prevProduct,
+        discountedPrice: res.data.discountedPrice,
+        price: res.data.price,
+        rating: res.data.rating,
+      }));
+      //  {"brand": "ACC", "discount": true, "discountedPrice": 200, "grade": "OPC 33", "id": 2, "imageSrc": "https://raw.githubusercontent.com/mohammadshahjahan/InfraMarketORM/refs/heads/main/assests/CementBag.png", "label": "ACC Concrete Plus", "price": 420, "rating": "0", "type": "Cement", "weight": "20 Kg"}
+      console.log('hi', res.data);
+      setLoading(false);
+    };
+    fetchProductDetails();
+  }, [currBagSize, currGrade, id]);
+
   useEffect(() => {
     const price = product.discount ? product.discountedPrice : product.price;
     setAmount(price * quantity);
@@ -48,6 +75,11 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
   const alertSuccess = () => {
     ToastAndroid.show('Item added successfully!', ToastAndroid.SHORT);
   };
+
+  useEffect(() => {
+    setQuantity(0);
+    setAmount(0);
+  }, [currBagSize, currGrade]);
 
   return (
     <>
@@ -72,7 +104,7 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
                 <Text style={{fontWeight: 600}}>
                   {product.rating.substring(0, 1)}
                 </Text>
-                (<Text>2 Reviews</Text>)
+                (<Text>1 Reviews</Text>)
               </Text>
             </View>
             <TouchableOpacity>
@@ -82,11 +114,15 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
             </TouchableOpacity>
           </View>
           <View>
-            <PriceBox
-              discount={product.discount}
-              discountedPrice={product.discountedPrice}
-              price={product.price}
-            />
+            {loading ? (
+              <Text>Loading...</Text>
+            ) : (
+              <PriceBox
+                discount={product.discount}
+                discountedPrice={product.discountedPrice}
+                price={product.price}
+              />
+            )}
           </View>
           <View
             style={{
@@ -132,33 +168,45 @@ const ProductPage: React.FC<ProductPageProps> = ({route, navigation}) => {
               <Text style={{fontWeight: 600}}>100</Text>
             </View>
           </View>
-          <View>
-            <Quantity quantity={quantity} setter={setQuantity} value={amount} />
-          </View>
-          <View style={[QuantityVariableStyles.box]}>
-            <TouchableOpacity
-              style={[QuantityVariableStyles.box]}
-              onPress={() => {
-                dispatch(
-                  addItemToCart({
-                    id: id,
-                    Grade: currGrade,
-                    BagSize: currBagSize,
-                    quantity: quantity,
-                    inventoryItem: [product],
-                  }),
-                );
-                alertSuccess();
-              }}>
-              <View
-                style={[
-                  QuantityVariableStyles.box,
-                  ProductScreenPageStyles.button,
-                ]}>
-                <Text style={{color: '#fff', fontSize: 20}}>ADD TO CART</Text>
+          {loading ? (
+            <Text>Loading...</Text>
+          ) : (
+            <>
+              <View>
+                <Quantity
+                  quantity={quantity}
+                  setter={setQuantity}
+                  value={amount}
+                />
               </View>
-            </TouchableOpacity>
-          </View>
+              <View style={[QuantityVariableStyles.box]}>
+                <TouchableOpacity
+                  style={[QuantityVariableStyles.box]}
+                  onPress={() => {
+                    dispatch(
+                      addItemToCart({
+                        id: id,
+                        Grade: currGrade,
+                        BagSize: currBagSize,
+                        quantity: quantity,
+                        inventoryItem: [product],
+                      }),
+                    );
+                    alertSuccess();
+                  }}>
+                  <View
+                    style={[
+                      QuantityVariableStyles.box,
+                      ProductScreenPageStyles.button,
+                    ]}>
+                    <Text style={{color: '#fff', fontSize: 20}}>
+                      ADD TO CART
+                    </Text>
+                  </View>
+                </TouchableOpacity>
+              </View>
+            </>
+          )}
         </View>
       </ScrollView>
     </>

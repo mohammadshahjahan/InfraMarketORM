@@ -19,6 +19,7 @@ interface PaymentModeProps {
   setSelectedPayment: React.Dispatch<React.SetStateAction<number | undefined>>;
   label: string;
   setStep: React.Dispatch<React.SetStateAction<number>>;
+  placeOrderHandler: () => void;
 }
 
 const PaymentMode: React.FC<PaymentModeProps> = ({
@@ -27,6 +28,7 @@ const PaymentMode: React.FC<PaymentModeProps> = ({
   setSelectedPayment,
   step,
   setStep,
+  placeOrderHandler,
 }) => {
   const {subTotal, isCouponAdded} = useSelector(
     (state: storeState) => state.CartReducer,
@@ -43,6 +45,7 @@ const PaymentMode: React.FC<PaymentModeProps> = ({
       Alert.alert(`Please ${label}`);
       return;
     }
+    placeOrderHandler();
     setStep(step + 1);
   };
   return (
